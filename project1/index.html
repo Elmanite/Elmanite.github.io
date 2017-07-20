@@ -9,11 +9,21 @@
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
     <script src="script/app.js"></script>
+    <script src="script/canvas.js"></script>
     <link rel="stylesheet" href="styles/style.css">
+    <style>
+      canvas{background: #eee; display: inline-block;}
+    </style>
   </head>
   <body>
     <div id="character-window">
       <h1>Hello project 1</h1>
+      <img id="m_rogue" src="images/male_rogue.jpg" alt="Character pic goes here">
+      <button id="move-right">Move Right</button>
     </div>
+    <div id="canvas-div">
+      <canvas id="canvas"width="750" height="500"></canvas>
+    </div>
+
   </body>
 </html>

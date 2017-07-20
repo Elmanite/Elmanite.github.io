@@ -66,16 +66,16 @@ const dungeonGame=()=>{
       this.fireResist=fireResist;
       this.lightningResist=lightningResist;
       this.specHit=false;
-      this.damage=0;
+      this.weaponDamage=0;
     }//close constructor
     attack(){
       let attack=0;
-      this.damage=0;
-      this.damage=Math.floor(Math.random()*4)+1
+      this.weaponDamage=0;
+      this.weaponDamage=Math.floor(Math.random()*4)+1
       attack=Math.floor(Math.random()*20)+1;
       if(attack>=rogue.ac){
-        console.log("The minotaur hit the rogue for "+ this.damage);
-        rogue.hp-=this.damage;
+        console.log("The minotaur hit the rogue for "+ this.weaponDamage);
+        rogue.hp-=this.weaponDamage;
       }else {
         console.log("The minotaur missed the rogue");
       }//close else
@@ -116,6 +116,7 @@ const dungeonGame=()=>{
   }
 }//close dungeonGame
 dungeonGame();
+//Try using a semi global variable called weaponDamage and just add to that based on the class such as rogue Palladin Warrior etc.
 //items to add
 //armor - leather adds 1 to ac
 //armor - steel adds 2 to ac but -1 movement
@@ -131,6 +132,22 @@ dungeonGame();
 //gazing demise - upgrades skeleton damage to 1-8 and ac of 9
 //vigilance sword-dagger - adds 2 damage and -1 target ac
 //quick draw belt - adds 3 engineering kits
+//Rooms I think I should build a class and then set the various properties of the rooms in the game into the class constructor
+//Chapel - encounter is a full heal by spending 1 turn in the chapel, it is 21 movements or spaces away from the starting position.
+//kitchen - encounter is a random chance between a potion, monster, treasure level 1 or can just rest for 3 health and 1 special ability, it is 16 spaces from start
+//Pantry - encounter is a random chance between a potion or monster, it is 16 spaces from start
+//Armory - encounter is a 50% change between discovering random armor or monster, it is 19 spaces from start
+//Gaurd Room - encounter is 4 statue monsters that come to life 1 at a time and attack the player. Once defeated the player gets choice of epic potion or magic sword level 1, it is 11 spaces from start
+//Cells - encounter is 4 chances to see a monster, a monster that becomes a permanent pet, or treasure. It is 12 spaces from start
+//The Hole - encounter is a 25% chance to fall in the hole and slide to level 6 taking 1-6 damage.
+//Torture chamber - encounter is 3 monsters before finding a treasure and being able to use the room to rest for 3 hp and 1 ability/turn. It is 72 spaces from start or 22 spaces by using a secret door, or 24 if the player has cleared the hole.
+//Lair - encounter is 3 monsters before finding a treasure and being able to use the room to rest for 3hp and 1 ability/turn. It is 80 spaces from start or 14 through secret door or 32 after clearing the hole.
+//Burrow - Encounter is 3 monsters before finding a treasure and being able to use the room to rest for 3hp and 1ability/turn. It is 85 spaces from start or 18 through secret door or 36 after clearing the hole.
+//Crypt - encounter is 3 montsers before finding a treasure and can use the room to rest for 3hp and 1 ability/turn. It is 93 spaces from start or 25 through secret door or 45 after clearing the hole.
+//Laboratory - encounter is 3 monsters before finding treasure and being able to use the room to rest for 3hp and 1 ability/turn. It is 95 spaces from start or 23 through secret door or 47 after the hole is cleared.
+
+
+
 //40 items or traps
   //4 strength potions -- adds 1 more damage roll to each swing
   //4 defense potions -- adds 4 ac for 1 combat
@@ -270,21 +287,21 @@ dungeonGame();
   //Potion of teleport - can go back to start immediately
   //Potion of Speed - Move 3 times normal for 1 round
 //Character Classes to add
-  //Ranger - 25 hp, 8 ac, 10 spellResist, 1-6 damage, secret 1-3, crit 18-20: Ability 1 - Bear Trap - Trap Target and Fire 3 Range Attacks (Ignore AC): Ability 2 - Spirit Cat Companion - Cougar helps in battle and heals Ranger for 7 hp on arrival: Passive Ability - Bow Ranged Attack 1-4 before battle starts
+  //Ranger - 25 hp, 8 ac, 10 spellResist, 1-6 damage, secret 1-3, crit 18-20: Ability 1 in place of attack - Bear Trap - Trap Target and Fire 3 Range Attacks (Ignore AC): Ability 2 free action - Spirit Cat Companion - Cougar helps in battle and heals Ranger for 7 hp on arrival: Passive Ability - Bow Ranged Attack 1-4 before battle starts
 
-  //Mage - 25 hp, 6 ac, 12 spellResist, see Passive ability for damage, 1-3 secret, crit 20: Ability 1 - Fireball does 6 damage if spellResist is broken then deal 2 burn damage each round (does not stack). No ac to break: Ability 2 - Lightning bolt does 7 damage if spellResist is broken then mage gets an improved crit buff of 13-17 for the battle: Ability 3 - Ice Blast does 5 damage if spellResist is broken then slow the target halving their damage to the mage: Ability 4 - Earth Armor the mage gets 2 ac and heals for 4 hp: Passive Ability - Magic Missile 1 damage if ac broken then add 1-4 damage
+  //Mage - 25 hp, 6 ac, 12 spellResist, see Passive ability for damage, 1-3 secret, crit 20: Ability 1 in place of attack - Fireball does 6 damage if spellResist is broken then deal 2 burn damage each round (does not stack). No ac to break: Ability 2 in place of attack - Lightning bolt does 7 damage if spellResist is broken then mage gets an improved crit buff of 13-17 for the battle: Ability 3 in place of attack - Ice Blast does 5 damage if spellResist is broken then slow the target halving their damage to the mage: Ability 4 free action - Earth Armor the mage gets 2 ac and heals for 4 hp: Passive Ability - Magic Missile 1 damage if ac broken then add 1-4 damage
 
-  //Necromancer - 20hp, 6 ac, 12 spellResist, 1-4 damage, secret 1-2, crit 20: Ability 1 - Poison Gas deals 3 damage now and 3 on targets turn: Ability 2 - Life Drain deals 5 damage and heals Necromance or pet for 5: Ability 3 - Corpse Explosion pet explodes for 5 damage if ac is broken deal another 3 damage: Passive Ability - Raise skeleton and life link, can take 1 turn to raise skeleton. Can split damage taken between skeleton and Necromance by 1/2
+  //Necromancer - 20hp, 6 ac, 12 spellResist, 1-4 damage, secret 1-2, crit 20: Ability 1 in place of attack - Poison Gas deals 3 on targets turn for 2 rounds: Ability 2 in place of attack - Life Drain deals 5 damage and heals Necromance or pet for 5: Ability 3 in place of attack - Corpse Explosion pet explodes for 5 damage if ac is broken deal another 3 damage: Passive Ability - Raise skeleton and life link, can take 1 turn to raise skeleton. Can split damage taken between skeleton and Necromance by 1/2
 
-  //Palladin 30 hp, 10 ac, 8 spellResist, 1-8 damage, secret 1-2, crit 19-20: Ability 1 - Heal Palladin heals for 20 hp: Ability 2 - Shield Slam hit for 6 damage if ac is broken the target is stunned: Passive Abiliy - Thorns Aura deal 2 damage when damaged
+  //Palladin 30 hp, 10 ac, 8 spellResist, 1-8 damage, secret 1-2, crit 19-20: Ability 1 in place of attack - Heal Palladin heals for 20 hp: Ability 2 in place of attack - Shield Slam hit for 6 damage if ac is broken the target is stunned: Passive Abiliy - Thorns Aura deal 2 damage when damaged
 
-  //Warrior 30 hp, 9 ac, 9 spellResist, 1-10 damage, secret 1-2, crit 19-20: Ability 1 - Double swing add 5 damage to attack after initial damage done: Ability 2 - Challenging Presence - Indimidating debuff reduces target ac by 1/2: Passive Ability - Life Steal - heal 1 hp for each successful hit which also works on double strike
+  //Warrior 30 hp, 9 ac, 9 spellResist, 1-10 damage, secret 1-2, crit 19-20: Ability 1 Reaction - Double swing add 5 damage to attack after initial damage done: Ability 2 Free action - Challenging Presence - Indimidating debuff reduces target ac by 1/2: Passive Ability - Life Steal - heal 1 hp for each successful hit which also works on double strike
 
-  //Shadow Dancer 25 hp, 8 ac, 10 spellResist, 1-8 damage, secret 1-3, crit 18-20: Ability 1 - Phantasm Mind Control - Target hits itself with its own damage to a min of 4 and ignores ac: Ability 2 - Clone - When about to take damage ignore and reflect 2 damage: Ability 3 - Shatter Sword - Shadowdancers sword now explodes on hitfor +3 damage for remainder of combat: Passive Ability - Spell Siphon when a skill is used heal 2 hp
+  //Shadow Dancer 25 hp, 8 ac, 10 spellResist, 1-8 damage, secret 1-3, crit 18-20: Ability 1 in place of attack - Phantasm Mind Control - Target hits itself with its own damage to a min of 4 and ignores ac: Ability 2 Reaction - Clone - When about to take damage ignore and reflect 2 damage: Ability 3 Free action - Shatter Sword - Shadowdancers sword now explodes on hitfor +3 damage for remainder of combat: Passive Ability - Spell Siphon when a skill is used heal 2 hp
 
-  //Engineer 25 hp, 9 ac, 9 spellResist, 1-6damage, secret 1-4, crit 17-20: Ability 1 - Gun Turret Kit - 5 damage and if break acadditional 2 damage: Ability 2 - Med Kit heal for 10: Ability 3 - Flame thrower Kit - Battle Buff +2 to his and damage: Passive Ability - Repair - use 1 turn to fix 2 kits or 1 if in combat
+  //Engineer 25 hp, 9 ac, 9 spellResist, 1-6damage, secret 1-4, crit 17-20: Ability 1 in place of attack - Gun Turret Kit - 5 damage and if break acadditional 2 damage: Ability 2 in place of attack - Med Kit heal for 10: Ability 3 Free action - Flame thrower Kit - Battle Buff +2 to his and damage: Passive Ability - Repair - use 1 turn to fix 2 kits or 1 if in combat
 
-  //Lancer 25hp, 9 ac, 9 spellResist, 1-8 damage, secret 1-2, crit 18-20: Ability 1 - Jump attack - Pounce on target doing attack as damage a min of 4 ignoring target ac: Ability 2 - Sundering Strike - Piercing strike for 5 damage and removes 2 ac from target this attack ignores ac: Ability 3 - Counter - When damaged, counter hit 3 ignoring ac of target: Passive ability - Escape Death - If killed heal 8 hp once per fight
+  //Lancer 25hp, 9 ac, 9 spellResist, 1-8 damage, secret 1-2, crit 18-20: Ability 1 in place of attack - Jump attack - Pounce on target doing attack as damage a min of 4 ignoring target ac: Ability 2 in place of attack - Sundering Strike - Piercing strike for 5 damage and removes 2 ac from target this attack ignores ac: Ability 3 Reaction - Counter - When damaged, counter hit 3 ignoring ac of target: Passive ability - Escape Death - If killed heal 8 hp once per fight
 
   //Rogue 25 hp, 8 ac, 10 spellResist, 1-4 damage X 2, secret 1-4, crit 18-20: Ability 1 in place of attack - Backstab - hit for 2d6 min 4 ignores ac: Ability 2 free action - Evasion - 50% dodge buff and heal rogue for 5: Passive Ability - Poison - After hit target takes 1 poison damage each round this is not for each attack
 
