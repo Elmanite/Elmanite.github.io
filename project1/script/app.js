@@ -111,9 +111,13 @@ const dungeonGame=()=>{
     //loot
     turn++;
   }//close gameSequence
-  class rooms{
-
-  }
+  // class rooms{
+  // }
+const endTurn = () =>{
+  energy=10;
+  console.log(energy);
+}
+  $('#end-turn').on("click", endTurn);
 }//close dungeonGame
 dungeonGame();
 //Try using a semi global variable called weaponDamage and just add to that based on the class such as rogue Palladin Warrior etc.

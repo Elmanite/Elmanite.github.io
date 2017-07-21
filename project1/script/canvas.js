@@ -9,6 +9,7 @@ $(()=>{
   let moveV=527;
   let gridy=2;
   let energy=10;
+  let totalTurns=0;
 //Drawn items
 c.beginPath();
   for(let i=0; i<25; i++){
@@ -62,6 +63,7 @@ const moveLeft=()=>{
     alert("You can't move that direction any further");
   }
   energy-=1;
+  console.log(energy);
 }//close moveLeft
 const moveRight=()=>{
   checkCollisionRight();
@@ -79,6 +81,7 @@ const moveRight=()=>{
     alert("You can't move that direction any further");
   }
   energy-=1;
+  console.log(energy);
 }//close moveRight
 const moveDown=()=>{
   checkCollisionDown();
@@ -95,10 +98,12 @@ const moveDown=()=>{
     alert("You can't move that direction any further");
   }
   energy-=1;
+  console.log(energy);
 }//close moveDown
 const moveUp=()=>{
   checkCollisionUp();
     checkChapel();
+    checkEnergy();
   if(moveV>0){
     c.beginPath();
     c.clearRect(moveH, moveV, 33, 33);
@@ -112,27 +117,25 @@ const moveUp=()=>{
     alert("You can't move that direction any further");
   }
   energy-=1;
+  console.log(energy);
 }
-$('#move-right').on("click", moveRight);
-$('#move-left').on("click", moveLeft);
-$('#move-down').on("click", moveDown);
-$('#move-up').on("click", moveUp);
+
 
 document.onkeydown = function(e) {
-    switch (e.keyCode) {
-        case 37:
-            moveLeft();
-            break;
-        case 38:
-            moveUp();
-            break;
-        case 39:
-            moveRight();
-            break;
-        case 40:
-            moveDown();
-            break;
-    }
+  switch (e.keyCode) {
+    case 37:
+      moveLeft();
+      break;
+    case 38:
+      moveUp();
+      break;
+    case 39:
+      moveRight();
+      break;
+    case 40:
+      moveDown();
+      break;
+  }
 };
 //Left wall north
 c.beginPath();
@@ -168,6 +171,12 @@ c.lineTo(1020, 561);
 c.strokeStyle="black";
 c.stroke();
 c.closePath();
+const checkEnergy=()=>{
+  if(energy<=0){
+    alert("You have run out of energy! Please end your turn");
+    endTurn();
+  }else{}
+}
 const checkChapel=()=>{
   if(moveV < 212){
     alert("Entering the chapel is working");
@@ -205,40 +214,33 @@ const checkCollisionDown=()=>{
     moveV=492;
   }else{}
 };
-  //Arc or circle
-  // c.beginPath();
-  // c.arc(300, 300, 30, 0, Math.PI*2, false);
-  // c.strokeStyle='blue';
-  // c.stroke();
-
-  // for(let i=0; i<3; i++){
-  //   const x = Math.floor(Math.random()*window.innerWidth);
-  //   const y = Math.floor(Math.random()*window.innerHeight);
-  //   c.beginPath();
-  //   c.arc(x, y, 30, 0, Math.PI*2, false);
-  //   c.strokeStyle='blue';
-  //   c.stroke();
-  // }
-  // let x = 200;
-  // let y = 200;
-  // let dy=4;
-  // let dx=4;
-  // let radius=30;
-  // const animate=()=>{
-  //   requestAnimationFrame(animate);
-  //   c.clearRect(0,0,canvas.width,canvas.height);
-  //   c.beginPath();
-  //   c.arc(x, y, radius, 0, Math.PI*2, false);
-  //   c.strokeStyle='blue';
-  //   c.stroke();
-  //   if(x + radius >canvas.width || x - radius < 0){
-  //     dx=-dx;
-  //   }
-  //   if(y + radius >canvas.height || y - radius < 0){
-  //     dy=-dy;
-  //   }
-  //   x+=dx;
-  //   y+=dy;
-  // }
-  // animate();
+const endTurn=()=>{
+  energy=10;
+  totalTurns++;
+  if(totalTurns>=20){
+    console.log("You have become lost in the dungeon as the entrance collapses on you!");
+  }else{
+    console.log("You rest within the halls of the dungeon and regain your energy. You now have "+ energy+" energy and have spent "+totalTurns+"/20 turns in the dungeon. You must hurry to find all the treasure you can before the entrance collapses.");
+  }
+}
+const encounterMonster=()=>{
+  console.log("You have encountered a monster and it comes at you. What do you want to do? Attack or run away?");
+  if(attack){
+    battle();
+  }else{
+    runAway();
+  }
+}
+const runAway=()=>{
+  console.log("You run from the monster but it manages to get a swing at you!");
+  const fleaSwing=Math.floor(Math.random()*20)+1;
+  if(fleaSwing>=rogue.ac){
+    rogue.hp-=monster1.weaponDamage;
+  }
+}
+$('#move-right').on("click", moveRight);
+$('#move-left').on("click", moveLeft);
+$('#move-down').on("click", moveDown);
+$('#move-up').on("click", moveUp);
+$('#end-turn').on("click", endTurn);
 });
