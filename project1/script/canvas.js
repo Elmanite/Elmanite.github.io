@@ -3,6 +3,9 @@ $(()=>{
   canvas.width = window.innerWidth-75;
   canvas.height = window.innerHeight-100;
   const c = canvas.getContext("2d");
+  let startH=6;
+  let moveH=0;
+  let moveV=0;
   let gridy=2;
   for(let i=0; i<25; i++){
     let gridx = 6;
@@ -16,17 +19,58 @@ $(()=>{
   const image1 = new Image();
   image1.src="images/male_rogue.jpg";
   c.drawImage(image1, 6, 2, 33, 33);
+  const moveLeft=()=>{
+    if(moveH>0){
+      c.clearRect(6+moveH,2+moveV, 33, 33);
+      c.drawImage(image1, moveH-29, 2+moveV, 33, 33);
+      c.fillRect(moveH+6, 2+moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      moveH-=35;
+      console.log(moveH);
+    }else{
+      alert("You can't move that direction any further");
+    }
+  }
   const moveRight=()=>{
-    let start=6;
-    let move;
-    c.clearRect(start+move,2, 33, 33);
-    c.beginPath();
-    c.drawImage(image1, 41, 2, 33, 33);
-    c.closePath();
-    move=+35;
-    console.log(move);
+    if(moveH<1225){
+      c.clearRect(6+moveH,2+moveV, 33, 33);
+      c.drawImage(image1, 41+moveH, 2+moveV, 33, 33);
+      c.fillRect(6+moveH, 2+moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      moveH+=35;
+      console.log(moveH);
+    }else{
+      alert("You can't move that direction any further");
+    }
+  }
+  const moveDown=()=>{
+    if(moveV<875){
+      c.clearRect(6+moveH,2+moveV, 33, 33);
+      c.drawImage(image1, 6+moveH, moveV+37, 33, 33);
+      c.fillRect(6+moveH, 2+moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      moveV+=35;
+      console.log(moveV);
+    }else{
+      alert("You can't move that direction any further");
+    }
+  }
+  const moveUp=()=>{
+    if(moveV>0){
+      c.clearRect(6+moveH,2+moveV, 33, 33);
+      c.drawImage(image1, 6+moveH, moveV-33, 33, 33);
+      c.fillRect(6+moveH, 2+moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      moveV-=35;
+      console.log(moveV);
+    }else{
+      alert("You can't move that direction any further");
+    }
   }
   $('#move-right').on("click", moveRight);
+  $('#move-left').on("click", moveLeft);
+  $('#move-down').on("click", moveDown);
+  $('#move-up').on("click", moveUp);
   // moveRogue();
   // c.renderAll();
   //line
