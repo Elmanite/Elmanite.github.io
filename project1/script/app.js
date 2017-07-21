@@ -92,7 +92,7 @@ const dungeonGame=()=>{
     }//close while loop
     console.log("Battle ended");
   }//close battle
-  battle();
+  // battle();
   const checkBattleWin=()=>{
     if(rogue.hp>0&&monster1.hp<=0){
       console.log("You have won the fight. What would you like to do next?");
