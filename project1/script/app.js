@@ -21,6 +21,7 @@ const dungeonGame=()=>{
       this.weaponDmg=0;
     }//close constructor
     meleeAttack(){
+      checkhp();
       let attack =0+this.weaponAttack;
       let damage=0+this.weaponDmg;
       let dmgDoneToMonster=0;

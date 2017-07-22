@@ -185,7 +185,7 @@ const checkChapel=()=>{
 }
 const checkMinotaur=()=>{
   if(moveH > 951){
-    alert("You encountered a monster");
+    encounterMonster();
     moveH=951;
   }else{}
 }
@@ -224,8 +224,8 @@ const endTurn=()=>{
   }
 }
 const encounterMonster=()=>{
-  console.log("You have encountered a monster and it comes at you. What do you want to do? Attack or run away?");
-  if(attack){
+  const encounterChoice = prompt("You have encountered a monster and it comes at you. What do you want to do? Attack(A) or run away? (R)", "");
+  if(encounterChoice==='A'||'a'){
     battle();
   }else{
     runAway();
@@ -236,6 +236,17 @@ const runAway=()=>{
   const fleaSwing=Math.floor(Math.random()*20)+1;
   if(fleaSwing>=rogue.ac){
     rogue.hp-=monster1.weaponDamage;
+    console.log("Ouch you got hit for "+monster1.weaponDamage+" but you managed to run away and fight another day!");
+  }else{
+    console.log("You managed to run away from the monster unscathed. Good job coward");
+  }
+}//close runAway
+const enounterChapel = () =>{
+  const encounterChoice=prompt("You have found a chapel room! You may rest here for 1 turn and heal to full. Yes/No?")
+  if(encounterChoice==='A'||'a'){
+    rogue.hp=25;
+  }else{
+    alert("Good luck on your travels!")
   }
 }
 $('#move-right').on("click", moveRight);
