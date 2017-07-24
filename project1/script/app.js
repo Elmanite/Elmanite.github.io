@@ -104,12 +104,12 @@ const dungeonGame=()=>{
     while(rogue.hp>0 && monster1.hp>0){
       checkBattleWin();
       rogue.meleeAttack();
-      console.log("The minotaur has "+monster1.hp+" hit points left");
+      // console.log("The minotaur has "+monster1.hp+" hit points left");
       checkBattleWin();
       monster1.attack();
-      console.log("You have "+rogue.hp+" hit points left");
+      // console.log("You have "+rogue.hp+" hit points left");
     }//close while loop
-    console.log("Battle ended");
+    // console.log("Battle ended");
   }//close battle
   const endTurn=()=>{
     console.log(currentBattle);
@@ -121,8 +121,8 @@ const dungeonGame=()=>{
       alert("You rest within the halls of the dungeon and regain your energy. You now have "+ energy+" energy and have spent "+turn+"/20 turns in the dungeon. You must hurry to find all the treasure you can before the entrance collapses.");
       energy=10;
       turn++;
-      $("#energy").append("Energy remaining: "+energy)
-      $("#turns").append("Turns spent in the dungeon: "+turn)
+      $("#energy").text("Energy remaining: "+energy)
+      $("#turns").text("Turns spent in the dungeon: "+turn)
     }//close else
   }//close endTurn
   const checkCurrentBattle=()=>{
@@ -130,17 +130,16 @@ const dungeonGame=()=>{
       prompt("You are currently in a battle and cannot end your turn! Get back in there and fight!");
     }else{}
   }//close checkCurrentBattle
-
   const startGame=()=>{
     alert('You are an adventurer and have entered the famous dungeon to acquire massive amounts of treasure. If the fables are true you should be able to live a life of luxury after taking the loot from this place. Proceed with caution though. So far, anyone who has ventured into the dungeon has not come back out at all!');
     energy=10;
     turn=0;
     totalTreasure=0;
-    $("#energy").append("Energy remaining: "+energy);
-    $("#turns").append("Turns spent in the dungeon: "+turn);
-    $("#treasure").append("Total treasure collected: "+totalTreasure);
-    $("#hp").append("Current Hit Points (HP): "+rogue.hp);
-    $("#ac").append("Current Armor Class (AC): "+rogue.ac);
+    $("#energy").text("Energy remaining: "+energy);
+    $("#turns").text("Turns spent in the dungeon: "+turn);
+    $("#treasure").text("Total treasure collected: "+totalTreasure);
+    $("#hp").text("Current Hit Points (HP): "+rogue.hp);
+    $("#ac").text("Current Armor Class (AC): "+rogue.ac);
   }//close startGame
   startGame();
 //Canvas code==================================================================
@@ -242,7 +241,7 @@ const dungeonGame=()=>{
       alert("You can't move that direction any further");
     }
     energy-=1;
-    $("#energy").append("Energy remaining: "+energy);
+    $("#energy").text("Energy remaining: "+energy);
   }//close moveLeft
   const moveRight=()=>{
     checkCollisionRight();
@@ -261,7 +260,7 @@ const dungeonGame=()=>{
       alert("You can't move that direction any further");
     }
     energy-=1;
-    $("#energy").append("Energy remaining: "+energy);
+    $("#energy").text("Energy remaining: "+energy);
   }//close moveRight
   const moveDown=()=>{
     checkCollisionDown();
@@ -275,17 +274,19 @@ const dungeonGame=()=>{
       moveV+=35;
       c.closePath();
       energy-=1;
-      $("#energy").append("Energy remaining: "+energy);
+      $("#energy").text("Energy remaining: "+energy);
     }else{
       alert("You can't move that direction any further");
-    }
+    }//close else
     // console.log(energy);
   }//close moveDown
   const moveUp=()=>{
     checkCollisionUp();
-      checkChapel();
-      checkEnergy();
-    if(moveV>0){
+    checkEnergy();
+    if(moveV < 212){
+      encounterChapel();
+      moveV=212;
+    }else{
       c.beginPath();
       c.clearRect(moveH, moveV, 33, 33);
       c.drawImage(image1, moveH, moveV-35, 33, 33);
@@ -294,10 +295,9 @@ const dungeonGame=()=>{
       moveV-=35;
       c.closePath();
       energy-=1;
-      // console.log(moveV, "This is vertical move");
-    }else{
-      alert("You can't move that direction any further");
+      $("#energy").text("Energy remaining: "+energy);
     }//close else
+    // checkChapel();
     // console.log(energy);
   }//close move up
   document.onkeydown = function(e) {
@@ -338,29 +338,44 @@ const dungeonGame=()=>{
     if(moveH<565&&moveV<527){
       alert("Stop trying to run into the wall!");
       moveH=566;
+      energy++;
     }else{}
   }//close checkCollisionLeft
   const checkCollisionRight=()=>{
     if(moveH>530&&moveV<527){
       alert("Stop trying to run into the wall!");
       moveH=496;
+      energy++;
     }else{}
   }//close checkCollisionRight
   const checkCollisionUp=()=>{
     if(moveH>565||moveH<530&&moveV<562){
       alert("Stop trying to run into the wall!");
       moveV=562;
+      energy++;
     }else{}
   }//close checkCollisionUP
   const checkCollisionDown=()=>{
     if(moveV>495){
       alert("Stop trying to run into the wall!");
       moveV=492;
+      energy++;
     }else{}
   }//close checkCollisionDown
+  const encounterChapel=()=>{
+    const encounter = prompt("You have found a chapel room! You may rest here for 1 turn and heal to full. Yes/No?");
+    if(encounter==='Yes'||'yes'){
+      rogue.hp=25;
+      turn++;
+    $("#hp").text("Current Hit Points (HP): "+rogue.hp);
+    $("#turns").text("Turns spent in the dungeon: "+turn);
+    }else{
+      alert("Good luck on your travels!")
+    }//close else
+  }//close encounterChapel
   const encounterMonster=()=>{
     const encounterChoice = prompt("You have encountered a monster and it comes at you. What do you want to do? Attack(A) or run away? (R)", "");
-    if(encounterChoice==='A'||'a'){
+    if(encounterChoice==='A'){
       battle();
     }else{
       runAway();
@@ -374,19 +389,8 @@ const dungeonGame=()=>{
       alert("Ouch you got hit for "+monster1.weaponDamage+" but you managed to run away and fight another day!");
     }else{
       alert("You managed to run away from the monster unscathed. Good job coward");
-    }
-  }//close runAway
-  const enounterChapel = () =>{
-    const encounterChoice=prompt("You have found a chapel room! You may rest here for 1 turn and heal to full. Yes/No?")
-    if(encounterChoice==='Yes'||'yes'){
-      rogue.hp=25;
-      turn++;
-    $("#hp").append("Current Hit Points (HP): "+rogue.hp);
-    $("#turns").append("Turns spent in the dungeon: "+turn);
-    }else{
-      alert("Good luck on your travels!")
     }//close else
-  }//close encounterChapel
+  }//close runAway
   $('#move-right').on("click", moveRight);
   $('#move-left').on("click", moveLeft);
   $('#move-down').on("click", moveDown);

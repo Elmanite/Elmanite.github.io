@@ -4,3 +4,12 @@
   margin: auto;
   display: inline-block;
 }
+#character-window{
+  flex-wrap: wrap;
+  float: left;
+  margin-left: 10px;
+}
+#stats-list{
+  list-style: none;
+  margin-left: 20px;
+}
