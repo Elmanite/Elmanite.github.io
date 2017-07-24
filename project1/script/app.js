@@ -6,11 +6,15 @@ $(()=>{
 //Next build a combat system that goes in rounds and stops after each round giving the player a choice of regular attack, special ability attack or run away.
 //Next build the sequence of play into the game. 1-Move, 2-Encounter, 3-Combat, 4-Loot.
 //The end game should be checking the amount of loot based on the amount of other characters.
-// monster damage is based on level. Level 1 = 1-4, Level 2=1-6, Level 3=1-8, Level 4=1-10, Level 5=1-12, level 6=1-14
+// For the first version there will only be a level 1 monters. In later versions monster damage is based on level. Level 1 = 1-4, Level 2=1-6, Level 3=1-8, Level 4=1-10, Level 5=1-12, level 6=1-14
 const dungeonGame=()=>{
   let dmgDoneToPlayer=0;
   let dmgDoneToMonster=0;
-  let turn=0;
+  let turn=1;
+  let addTreasure=Math.floor(Math.random()*3000)+250;
+  let totalTreasure=0;
+  let currentBattle=false;
+  let energy=10;
   class charachterClass{
     constructor(name, hp, spellResist, ac){
       this.name=name;
@@ -21,7 +25,7 @@ const dungeonGame=()=>{
       this.weaponDmg=0;
     }//close constructor
     meleeAttack(){
-      checkhp();
+      checkBattleWin();
       let attack =0+this.weaponAttack;
       let damage=0+this.weaponDmg;
       let dmgDoneToMonster=0;
@@ -30,23 +34,23 @@ const dungeonGame=()=>{
         attack=Math.floor(Math.random()*20)+1;
         if(attack>=monster1.ac){
           damage=Math.floor(Math.random()*4)+1
+          alert("You swing and hit the monster for "+damage+" damage!");
           if(attack>=18){//the rogue can score a critical hit if the attack is 18 or higher. This applies to each attack
             damage*=2;//the damage multiplier if a critical hit
-            console.log("You scored a critical hit! You damage the monster for "+damage);
+            alert("You scored a critical hit! You damage the monster for "+damage);
             dmgDoneToMonster=dmgDoneToMonster+damage;
-            console.log(damage+" damage to monster on this swing");
+            // console.log(damage+" damage to monster on this swing");
           }else{
-              console.log("You missed your chance at a critical hit!");
-              console.log("Rogue hit the minotaur for "+damage);
+              alert("You missed your chance at a critical hit! You still managed to hurt the monster for "+damage);
               dmgDoneToMonster=dmgDoneToMonster+damage;
-              console.log(damage+" damage to monster on this swing");
+              // console.log(damage+" damage to monster on this swing");
           }//close nested else
         }else{
-          console.log("Rogue missed");
+          alert("You completely missed this swing!");
         }//close else
       }//close for loop
       monster1.hp-=dmgDoneToMonster;
-      console.log(dmgDoneToMonster+" Total damage to monster this round");
+      // console.log(dmgDoneToMonster+" Total damage to monster this round");
     }//close melee
     secretDoor(){
       this.secret=Math.floor(Math.random()*4)+1;
@@ -75,52 +79,322 @@ const dungeonGame=()=>{
       this.weaponDamage=Math.floor(Math.random()*4)+1
       attack=Math.floor(Math.random()*20)+1;
       if(attack>=rogue.ac){
-        console.log("The minotaur hit the rogue for "+ this.weaponDamage);
+        alert("The monster hit the rogue for "+ this.weaponDamage);
         rogue.hp-=this.weaponDamage;
       }else {
-        console.log("The minotaur missed the rogue");
+        alert("The minotaur missed the rogue");
       }//close else
     }//close attack
   }//close monster class
   const rogue = new charachterClass('Galladin', 25, 10, 8);
+  // console.log(rogue);
   const monster1 = new monster ('minotaur', 5, 4, 10, 5, 2, 2);
+  // console.log(monster1);
+  const checkBattleWin=()=>{
+    if(rogue.hp>0&&monster1.hp<=0){
+      totalTreasure=addTreasure+totalTreasure;
+      alert("You have won the fight! You have gained "+addTreasure+" in gold worth of treasures");
+      currentBattle=false;
+    }else{
+      // respawn();
+    }//close else
+  }//close checkBattleWin
   const battle=()=>{
+    currentBattle=true;
     while(rogue.hp>0 && monster1.hp>0){
-        rogue.meleeAttack();
-        console.log("The minotaur has "+monster1.hp+" hit points left");
-        monster1.attack();
-        console.log("You have "+rogue.hp+" hit points left");
+      checkBattleWin();
+      rogue.meleeAttack();
+      console.log("The minotaur has "+monster1.hp+" hit points left");
+      checkBattleWin();
+      monster1.attack();
+      console.log("You have "+rogue.hp+" hit points left");
     }//close while loop
     console.log("Battle ended");
   }//close battle
-  // battle();
-  const checkBattleWin=()=>{
-    if(rogue.hp>0&&monster1.hp<=0){
-      console.log("You have won the fight. What would you like to do next?");
-      gameSequence();
+  const endTurn=()=>{
+    console.log(currentBattle);
+    console.log(turn);
+    console.log(energy);
+    if(turn>=20){
+      alert("You have become lost in the dungeon as the entrance collapses on you! GAME OVER!");
     }else{
-      console.log("You have perished at the hands of the evil monster. You will respawn back at the beginning area.");
-      respawn();
+      alert("You rest within the halls of the dungeon and regain your energy. You now have "+ energy+" energy and have spent "+turn+"/20 turns in the dungeon. You must hurry to find all the treasure you can before the entrance collapses.");
+      energy=10;
+      turn++;
+      $("#energy").append("Energy remaining: "+energy)
+      $("#turns").append("Turns spent in the dungeon: "+turn)
     }//close else
-  }//close checkBattleWin
-  const gameSequence=()=>{
-    const movement=()=>{
-      console.log("You have movement points left");
+  }//close endTurn
+  const checkCurrentBattle=()=>{
+    if(currentBattle){
+      prompt("You are currently in a battle and cannot end your turn! Get back in there and fight!");
+    }else{}
+  }//close checkCurrentBattle
+
+  const startGame=()=>{
+    alert('You are an adventurer and have entered the famous dungeon to acquire massive amounts of treasure. If the fables are true you should be able to live a life of luxury after taking the loot from this place. Proceed with caution though. So far, anyone who has ventured into the dungeon has not come back out at all!');
+    energy=10;
+    turn=0;
+    totalTreasure=0;
+    $("#energy").append("Energy remaining: "+energy);
+    $("#turns").append("Turns spent in the dungeon: "+turn);
+    $("#treasure").append("Total treasure collected: "+totalTreasure);
+    $("#hp").append("Current Hit Points (HP): "+rogue.hp);
+    $("#ac").append("Current Armor Class (AC): "+rogue.ac);
+  }//close startGame
+  startGame();
+//Canvas code==================================================================
+// ============================================================================
+  const canvas = document.querySelector("#canvas");
+  canvas.width = window.innerWidth-75;
+  canvas.height = window.innerHeight-100;
+  const c = canvas.getContext("2d");
+  //Variables
+  let startH=6;
+  let moveH=531;
+  let moveV=527;
+  let gridy=2;
+//Drawn items
+  c.beginPath();
+  for(let i=0; i<25; i++){
+    let gridx = 6;
+    for(let i=0; i<36; i++){
+      c.fillStyle="rgba(255,0,0,0.2)";
+      c.fillRect(gridx, gridy, 33, 33);
+        gridx+=35;
+    }//close for loop 2
+    gridy+=35;
+  }//close for loop1
+  c.closePath();
+//Clear a sqare from the grid and draw the chappel square
+  c.beginPath();
+  c.clearRect(532, 108, 66, 66);
+  c.fillStyle='yellow';
+  const drawchappelRoom = c.fillRect(532, 108, 67, 67);
+  c.closePath();
+//add the chappel text
+  c.beginPath();
+  c.font="20px Helvetica";
+  c.fillStyle='black';
+  c.fillText("Chapel", 533, 130);
+  c.closePath();
+//draw the character image on the grid
+  c.beginPath();
+  const image1 = new Image();
+  image1.src="images/male_rogue.jpg";
+  c.drawImage(image1, moveH, moveV, 33, 33);
+  c.closePath();
+//Draw the monster on the grid
+  const image2 = new Image();
+  image2.src="images/minotaur.jpg";
+  c.beginPath();
+  c.clearRect(1021,527,33,33);
+  c.drawImage(image2, 1021, 527, 33, 33);
+  c.closePath();
+  //Draw Left wall north
+    c.beginPath();
+    c.moveTo(530, 525);
+    c.lineTo(530, 108);
+    c.strokeStyle="black";
+    c.stroke();
+  //Draw Right wall north
+    c.beginPath();
+    c.moveTo(565, 525);
+    c.lineTo(565, 176);
+    c.strokeStyle="black";
+    c.stroke();
+    c.closePath();
+  //Draw Top wall East
+    c.beginPath();
+    c.moveTo(565, 525);
+    c.lineTo(1020, 525);
+    c.strokeStyle="black";
+    c.stroke();
+    c.closePath();
+  //Draw Top Wall West
+    c.beginPath();
+    c.moveTo(531, 525);
+    c.lineTo(6, 525);
+    c.strokeStyle="black";
+    c.stroke();
+    c.closePath();
+  //Draw Bottom Wall
+    c.beginPath();
+    c.moveTo(6, 561);
+    c.lineTo(1020, 561);
+    c.strokeStyle="black";
+    c.stroke();
+    c.closePath();
+//These functions are called on button clicks to move the character around the grid
+  const moveLeft=()=>{
+    checkCollisionLeft();
+    checkEnergy();
+    if(moveH>0){
+      c.beginPath();
+      c.clearRect(moveH,moveV, 33, 33);
+      c.drawImage(image1, moveH-35, moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      c.fillRect(moveH, moveV, 33, 33);
+      moveH-=35;
+      c.closePath();
+    console.log(moveH);
+    }else{
+      alert("You can't move that direction any further");
     }
-    //encounter
-    //combat
-    //loot
-    turn++;
-  }//close gameSequence
-  // class rooms{
-  // }
-const endTurn = () =>{
-  energy=10;
-  console.log(energy);
-}
+    energy-=1;
+    $("#energy").append("Energy remaining: "+energy);
+  }//close moveLeft
+  const moveRight=()=>{
+    checkCollisionRight();
+    checkMinotaur();
+    checkEnergy();
+    if(moveH<1225){
+      c.beginPath();
+      c.clearRect(moveH, moveV, 33, 33);
+      c.drawImage(image1, moveH+35, moveV, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      c.fillRect(moveH, moveV, 33, 33);
+      moveH+=35;
+      c.closePath();
+      // console.log(moveH);
+    }else{
+      alert("You can't move that direction any further");
+    }
+    energy-=1;
+    $("#energy").append("Energy remaining: "+energy);
+  }//close moveRight
+  const moveDown=()=>{
+    checkCollisionDown();
+    checkEnergy();
+    if(moveV<875){
+      c.beginPath();
+      c.clearRect(moveH, moveV, 33, 33);
+      c.drawImage(image1, moveH, moveV+35, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      c.fillRect(moveH, moveV, 33, 33);
+      moveV+=35;
+      c.closePath();
+      energy-=1;
+      $("#energy").append("Energy remaining: "+energy);
+    }else{
+      alert("You can't move that direction any further");
+    }
+    // console.log(energy);
+  }//close moveDown
+  const moveUp=()=>{
+    checkCollisionUp();
+      checkChapel();
+      checkEnergy();
+    if(moveV>0){
+      c.beginPath();
+      c.clearRect(moveH, moveV, 33, 33);
+      c.drawImage(image1, moveH, moveV-35, 33, 33);
+      c.fillStyle="rgba(255,0,0,0.2)";
+      c.fillRect(moveH, moveV, 33, 33);
+      moveV-=35;
+      c.closePath();
+      energy-=1;
+      // console.log(moveV, "This is vertical move");
+    }else{
+      alert("You can't move that direction any further");
+    }//close else
+    // console.log(energy);
+  }//close move up
+  document.onkeydown = function(e) {
+    switch (e.keyCode) {
+      case 37:
+        moveLeft();
+        break;
+      case 38:
+        moveUp();
+        break;
+      case 39:
+        moveRight();
+        break;
+      case 40:
+        moveDown();
+        break;
+    }//close switch
+  }//close on key down
+  const checkEnergy=()=>{
+    if(energy<=0){
+      alert("You have run out of energy! Please end your turn");
+      endTurn();
+    }else{}
+  }//close checkEnergy
+  const checkChapel=()=>{
+    if(moveV < 212){
+      encounterChapel();
+      moveV=212;
+    }else{}
+  }//close checkChapel
+  const checkMinotaur=()=>{
+    if(moveH > 951){
+      encounterMonster();
+      moveH=951;
+    }else{}
+  }//close checkMinotaur
+  const checkCollisionLeft=()=>{
+    if(moveH<565&&moveV<527){
+      alert("Stop trying to run into the wall!");
+      moveH=566;
+    }else{}
+  }//close checkCollisionLeft
+  const checkCollisionRight=()=>{
+    if(moveH>530&&moveV<527){
+      alert("Stop trying to run into the wall!");
+      moveH=496;
+    }else{}
+  }//close checkCollisionRight
+  const checkCollisionUp=()=>{
+    if(moveH>565||moveH<530&&moveV<562){
+      alert("Stop trying to run into the wall!");
+      moveV=562;
+    }else{}
+  }//close checkCollisionUP
+  const checkCollisionDown=()=>{
+    if(moveV>495){
+      alert("Stop trying to run into the wall!");
+      moveV=492;
+    }else{}
+  }//close checkCollisionDown
+  const encounterMonster=()=>{
+    const encounterChoice = prompt("You have encountered a monster and it comes at you. What do you want to do? Attack(A) or run away? (R)", "");
+    if(encounterChoice==='A'||'a'){
+      battle();
+    }else{
+      runAway();
+    }//close else
+  }//close encounterMonster
+  const runAway=()=>{
+    alert("You run from the monster but it manages to get a swing at you!");
+    const fleaSwing=Math.floor(Math.random()*20)+1;
+    if(fleaSwing>=rogue.ac){
+      rogue.hp-=monster1.weaponDamage;
+      alert("Ouch you got hit for "+monster1.weaponDamage+" but you managed to run away and fight another day!");
+    }else{
+      alert("You managed to run away from the monster unscathed. Good job coward");
+    }
+  }//close runAway
+  const enounterChapel = () =>{
+    const encounterChoice=prompt("You have found a chapel room! You may rest here for 1 turn and heal to full. Yes/No?")
+    if(encounterChoice==='Yes'||'yes'){
+      rogue.hp=25;
+      turn++;
+    $("#hp").append("Current Hit Points (HP): "+rogue.hp);
+    $("#turns").append("Turns spent in the dungeon: "+turn);
+    }else{
+      alert("Good luck on your travels!")
+    }//close else
+  }//close encounterChapel
+  $('#move-right').on("click", moveRight);
+  $('#move-left').on("click", moveLeft);
+  $('#move-down').on("click", moveDown);
+  $('#move-up').on("click", moveUp);
   $('#end-turn').on("click", endTurn);
 }//close dungeonGame
 dungeonGame();
+});
 //Try using a semi global variable called weaponDamage and just add to that based on the class such as rogue Palladin Warrior etc.
 //items to add
 //armor - leather adds 1 to ac
@@ -309,6 +583,3 @@ dungeonGame();
   //Lancer 25hp, 9 ac, 9 spellResist, 1-8 damage, secret 1-2, crit 18-20: Ability 1 in place of attack - Jump attack - Pounce on target doing attack as damage a min of 4 ignoring target ac: Ability 2 in place of attack - Sundering Strike - Piercing strike for 5 damage and removes 2 ac from target this attack ignores ac: Ability 3 Reaction - Counter - When damaged, counter hit 3 ignoring ac of target: Passive ability - Escape Death - If killed heal 8 hp once per fight
 
   //Rogue 25 hp, 8 ac, 10 spellResist, 1-4 damage X 2, secret 1-4, crit 18-20: Ability 1 in place of attack - Backstab - hit for 2d6 min 4 ignores ac: Ability 2 free action - Evasion - 50% dodge buff and heal rogue for 5: Passive Ability - Poison - After hit target takes 1 poison damage each round this is not for each attack
-
-
-});
