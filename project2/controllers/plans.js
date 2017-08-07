@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Plan = require('../models/plans.js');
-const User = require('../models.users.js');
+const User = require('../models/users.js');
 
 router.get('/', (req, res)=>{
   if(req.session.logged){
@@ -49,7 +49,7 @@ router.post('/', (req, res)=>{
   User.findById(req.body.userId, (err, foundUser)=>{
     Plan.create(req.body, (err, createdPlan)=>{
       foundUser.plan.push(createdPlan);
-      foundUser.save((err, data)={
+      foundUser.save((err, data)=>{
         res.redirect('/plans');
       });
     });

@@ -11,7 +11,7 @@ router.get('/register', (req, res, next)=>{
 });
 router.post('/login', (req, res, next)=>{
   User.findOne({username: req.body.username}, (err, user)=>{
-    if(user){
+    if(req.session.logged){
       if(bcrypt.compareSync(req.body.password,
       user.password)){
         req.session.message = '';

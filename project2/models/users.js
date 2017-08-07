@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
  lastName: String,
  mailingAddress: String,
  city: String,
- State: String
+ State: String,
  plan:[Plan.schema]
 });
 const User = mongoose.model('User', UserSchema);

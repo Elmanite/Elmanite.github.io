@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
-const mongoose = reqiure ('mongoose');
-const User = require('../models/users.js');
-const Plan = require('../models.plans.js');
+const mongoose = require('mongoose');
+const User = require('./models/users.js');
+const Plan = require('./models/plans.js');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require ('express-session');
-const userController = require ('../controllers/users.js');
-const plansController = require ('../controllers/plans.js');
-const sessionsController = ('../controllers/session.js');
+const userController = require ('./controllers/users.js');
+const plansController = require ('./controllers/plans.js');
+const sessionsController = ('./controllers/session.js');
 
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -17,10 +17,9 @@ app.use(session({
   resave:false,
   saveUninitialized:false
 }));
-app.use('/plans', plansController);
-app.use('/session', sessionsController);
+app.use('/sessions', sessionsController);
 app.use('/users', userController);
-
+app.use('/plans', plansController);
 app.get('/', (req, res)=>{
   res.render('index.ejs');
 });
