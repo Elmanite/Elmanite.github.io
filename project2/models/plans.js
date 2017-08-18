@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const User = require('./users.js');
+const Customer = require('./customers.js');
 const PlanSchema = new mongoose.Schema({
   planName: String,
-  expenses:[
-    {expenseName:String},
-    {expenseAmount: Number},
-    {expenseCategory: String}
-  ],
+  expenseAmount1: Number,
+  expenseCategory1: String,
+  expenseAmount2: Number,
+  expenseCategory2: String,
   expenseTotal: Number
 });
 const Plan = mongoose.model('Plan', PlanSchema);

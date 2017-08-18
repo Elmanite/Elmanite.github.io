@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title></title>
+		<%include ../partials/head.ejs%>
+		<%include ../partials/nav.ejs%>
 	</head>
 	<body>
 		<header>
-			<h1>Create a Financial Plan</h1>
+			<h1>Creating a Financial Plan</h1>
 			<nav>
 				<ul>
-					<li>
-						<a href="/">Home</a>
-					</li>
 					<li>
 						<a href="/plans">Financial Plans Index</a>
 					</li>
@@ -20,15 +17,20 @@
 		</header>
 		<main>
 			<form action="/plans" method="post">
-				<select name="userId">
-                    <% for(let i = 0; i < users.length; i++) { %>
-                        <option value="<%=users[i]._id%>"><%=users[i].username%></option>
+				<select name="customerId">
+                    <% for(let i = 0; i < customers.length; i++) { %>
+                        <option value="<%=customers[i]._id%>"><%=customers[i].firstName%> <%=customers[i].lastName%></option>
                     <% } %>
                 </select><br/>
-				<input type="text" name="title" /><br/>
-				<textarea name="body"></textarea><br/>
+				Plan Name: <input type="text" name="planName" /><br/>
+				Expense Category: <input type="text" name="expenseCategory1" /><br/>
+				Expense Amount: <input type="number" name="expenseAmount1" /><br/>
+				Expense Category: <input type="text" name="expenseCategory2" /><br/>
+				Expense Amount: <input type="number" name="expenseAmount2" /><br/>
+
 				<input type="submit" value="Save new plan"/>
 			</form>
 		</main>
+	<%include ../partials/footer.ejs%>
 	</body>
 </html>

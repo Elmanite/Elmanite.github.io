@@ -3,15 +3,14 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<%include ../partials/head.ejs%>
+		<%include ../partials/nav.ejs%>
 	</head>
 	<body>
 		<header>
-			<h1>Edit <%=plan.planName%>'s Info</h1>
+			<h1>Edit <%=plans.planName%>'s Info</h1>
 			<nav>
 				<ul>
-					<li>
-						<a href="/">Home</a>
-					</li>
 					<li>
 						<a href="/plans">Financial plans Index</a>
 					</li>
@@ -20,23 +19,26 @@
 		</header>
 		<main>
 			<h2>Financial Plan Attributes:</h2>
-			<form action="/plans/<%=plan._id%>?_method=PUT" method="post">
-				<select name="UserId">
-                    <% for(let i = 0; i < users.length; i++) { %>
-                        <option
-							value="<%=users[i]._id%>"
-							<% if(users[i]._id.toString() === planUser._id.toString()){ %>
-								selected
-							<% } %>
-							>
-							<%=users[i].name%>
-						</option>
-                    <% } %>
+			<form action="/plans/<%=plans._id%>?_method=PUT" method="post">
+				<select name="customerId">
+            <% for(let i = 0; i < customers.length; i++) { %>
+                <option value="<%=customers[i]._id%>"
+									<% if(customers[i]._id.toString() === planCustomer._id.toString()){ %>
+										selected
+										<% } %>
+								><!-- close option -->
+								<%=customers[i].firstName%> <%=customers[i].lastName%>
+								</option>
+            <% } %>
                 </select><br/>
-				<input type="text" name="title" value="<%=plan.planName%>"/><br/>
-				<textarea name="body"><%=plan.body%></textarea><br/>
+				Plan Name: <input type="text" name="planName" value="<%=plans.planName%>"/><br/>
+				Expense category: <input type="text" name="expenseCategory1"/><br/>
+				Expense amount: <input type="number" name="expenseAmount1"/><br/>
+				Expense Category: <input type="text" name="expenseCategory2" /><br/>
+				Expense Amount: <input type="number" name="expenseAmount2" /><br/>
 				<input type="submit" value="Update Financial Plan"/>
 			</form>
 		</main>
+			  <%include ../partials/footer.ejs%>
 	</body>
 </html>

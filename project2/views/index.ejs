@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
+		<%include ./partials/head.ejs%>
+		<%include ./partials/nav.ejs%>
 	</head>
 	<body>
 		<header>
@@ -10,19 +12,20 @@
 			<nav>
 				<ul>
 					<li>
-						<a href="/users">List of user profiles</a>
+						<a href="/customers">List of Customers</a>
 					</li>
 					<li>
 						<a href="/plans">List of Financial plans</a>
 					</li>
-          <li>
+          <!-- <li>
             <a href="/sessions/login">Login</a>
           </li>
           <li>
             <a href="/sessions/register">Register</a>
-          </li>
+          </li> -->
 				</ul>
 			</nav>
 		</header>
+		    <%include ./partials/footer.ejs%>
 	</body>
 </html>
