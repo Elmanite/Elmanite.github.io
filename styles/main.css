@@ -4,4 +4,31 @@
 }
 .header {
   border: solid 1px green;
+
+}
+.navbar ul {
+  display: grid;
+  border: solid 1px grey;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  padding: 14px 0;
+}
+.navList {
+  list-style: none;
+  text-align: center;
+}
+.navList a {
+  text-decoration: none;
+  background-color: black;
+  color: pink;
+  padding: 14px 25px;
+  border-radius: 5px;
+}
+.main {
+  border: solid 1px red;
+}
+.sidebar {
+  border: solid 1px green;
+}
+.footer {
+  border: solid 1px pink;
 }
