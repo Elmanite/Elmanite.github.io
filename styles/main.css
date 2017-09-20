@@ -1,0 +1,81 @@
+.wrapper {
+  display: grid;
+  border: solid 1px black;
+}
+header {
+  background: url('../pics/ice2.jpg');
+  border: solid 1px blue;
+}
+#menuImg {
+  max-width: 20px;
+  max-height: 20px;
+}
+#mainMenu {
+  background-image: url("pics/menu.png");
+  max-width: 100px;
+}
+#mainMenu ul {
+  display: none;
+}
+#mainMenu h3.tap ul {
+  display: block;
+}
+#mainMenu .sub-arrow:after {
+  content:'\203A';
+  float:right;
+  margin-right: 20px;
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+}
+#mainMenu h3.tap .sub-arrow:after {
+  content: '\2039';
+}
+#mainMenu h3:hover {
+  cursor: pointer;
+}
+#headerName {
+  text-align: center;
+}
+#headerTitle {
+  text-align: center;
+}
+#headerStatement {
+  max-width: 1005px;
+  border-radius: 15px;
+  background: white;
+  color: rgb(121, 27, 204);
+  text-align: center;
+  margin: auto;
+}
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+.navbar ul {
+  display: grid;
+  grid-column: 2/3;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  padding: 14px 10px;
+  margin: 0;
+}
+.navList {
+  list-style: none;
+  text-align: center;
+}
+.navList a {
+  text-decoration: none;
+  background-color: black;
+  color: rgb(19, 232, 46);
+  padding: 14px 5px;
+  border-radius: 5px;
+}
+.main {
+  border: solid 1px red;
+}
+.sidebar {
+  border: solid 1px green;
+}
+.footer {
+  border: solid 1px pink;
+}
